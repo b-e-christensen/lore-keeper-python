@@ -18,6 +18,7 @@
 #     print('test')
 #     return
 
+from os import getenv
 from flask import Flask
 
 from server.db import init_db
@@ -29,13 +30,13 @@ def create_app(test_config=None):
   app.url_map.strict_slashes = False
   app.config['DEBUG'] = True
   app.config.from_mapping(
-    SECRET_KEY='super_secret_key'
+    SECRET_KEY=getenv('SECRET')
   )
 
   @app.route('/profile')
   def my_profile():
     response_body = {
-        "name": "Buster",
+        "name": "Ghost Buster",
         "about": "bustin makes me feel good"
     }
     print(response_body)
