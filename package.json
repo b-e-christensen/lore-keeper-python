@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "develop": "concurrently \"cd server && flask run --no-debugger\" \"cd client && npm start\""
+    "develop": "concurrently \"cd server && flask run --no-debugger\" \"cd client && npm start\"",
+    "install": "cd client && npm i",
+    "pip-install": "cd server && /venv/Scripts/activate && pip install -r requirements.txt"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,6 @@
   },
   "homepage": "https://github.com/b-e-christensen/lore-keeper-python#readme",
   "dependencies": {
-    "axios": "^0.27.2",
     "concurrently": "^7.3.0"
   }
 }
