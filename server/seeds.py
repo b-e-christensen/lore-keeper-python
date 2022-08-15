@@ -1,5 +1,6 @@
-from models import User
+from models import User, File, Content, Tag
 from db import Session, Base, engine
+
 
 # drop and rebuild tables
 Base.metadata.drop_all(engine)
@@ -17,5 +18,24 @@ db.add_all([
 ])
 
 db.commit()
+
+db.add_all([
+  File(title='Test File', user_id=1)
+])
+
+db.commit()
+
+db.add_all([
+  Content(title='Test Content No. 1', number='1', content='this is really important stuff', user_id=1, file_id=1),
+  Content(title='Test Content No. 2', number='1', content='this is even more really important stuff! No. 2', user_id=1, file_id=1)
+])
+
+db.commit()
+
+# db.add_all([
+#   Tag(first_content_id=1, second_content_id=2)
+# ])
+
+# db.commit()
 
 db.close()

@@ -1,6 +1,6 @@
 from enum import unique
 from db import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ARRAY
 from sqlalchemy.orm import validates
 import bcrypt
 
