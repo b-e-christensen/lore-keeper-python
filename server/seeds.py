@@ -20,7 +20,7 @@ db.add_all([
 db.commit()
 
 db.add_all([
-  File(title='Test File', user_id=1)
+  File(title='Test File', collaborators=['Hey', 'Hello'], user_id=1)
 ])
 
 db.commit()
@@ -32,10 +32,10 @@ db.add_all([
 
 db.commit()
 
-# db.add_all([
-#   Tag(first_content_id=1, second_content_id=2)
-# ])
+db.add_all([
+  Tag(content_id=1, title='silly goose', link='hey.com')
+])
 
-# db.commit()
+db.commit()
 
 db.close()

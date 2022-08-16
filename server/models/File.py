@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import unique
 from db import Base
-from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, JSON, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 
@@ -12,7 +12,7 @@ class File(Base):
     # password = Column(String(100), nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     # unsure if this is something I wish to keep. functionality to allow multiple people to edit a file. 
-    # collaborators = Column(ARRAY)
+    collaborators = Column(JSON)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     user = relationship('User')
