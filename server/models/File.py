@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import unique
-from db import Base
+from server.db import Base
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
