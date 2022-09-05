@@ -1,4 +1,6 @@
+from lib2to3.pgen2 import token
 from os import getenv
+from urllib import response
 from flask import Flask, request
 from server.db import init_db
 import json
@@ -9,6 +11,7 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 from server.models import User
 from server.db import get_db
+from server.routes import api
 
 
 def create_app(test_config=None):
@@ -41,16 +44,28 @@ def create_app(test_config=None):
 
     access_token = create_access_token(identity=email)
     response = {"access_token": access_token}
+    print(access_token)
+    print(response)
     return response
 
   @app.route('/profile')
   @jwt_required() # auth wrap
   def my_profile():
+    db = get_db()
+    token_results = get_jwt()
+    token_email = token_results['sub']
+
+    find_user = db.query(User).filter(User.email == token_email).one()
+    print('------- found user ---------')
+    print(find_user.id)
+    print(find_user.username)
+    print(find_user.email)
+    print(find_user.password)
+    print('------- found user ---------')
     response_body = {
-        "name": "Ghost Buster",
-        "about": "bustin makes me feel good"
+      'username': find_user.username,
+      'email': find_user.email
     }
-    print(response_body)
     return response_body
 
   @app.route("/logout", methods=["POST"])
@@ -76,7 +91,7 @@ def create_app(test_config=None):
         # Case where there is not a valid JWT. Just return the original respone
         return response
 
-
+  app.register_blueprint(api)
   init_db(app)
 
 
