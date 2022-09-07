@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
-from server.models import User
+from server.models import User, File
 from server.db import get_db
 from server.routes import api
 
@@ -44,8 +44,6 @@ def create_app(test_config=None):
 
     access_token = create_access_token(identity=email)
     response = {"access_token": access_token}
-    print(access_token)
-    print(response)
     return response
 
   @app.route('/profile')
@@ -90,6 +88,7 @@ def create_app(test_config=None):
     except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
+
 
   app.register_blueprint(api)
   init_db(app)
