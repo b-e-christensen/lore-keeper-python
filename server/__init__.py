@@ -1,3 +1,4 @@
+from calendar import month
 from lib2to3.pgen2 import token
 from os import getenv
 from urllib import response
@@ -11,7 +12,7 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 from server.models import User, File
 from server.db import get_db
-from server.routes import api
+from server.routes import api, profile, file
 
 
 def create_app(test_config=None):
@@ -20,7 +21,7 @@ def create_app(test_config=None):
   app.url_map.strict_slashes = False
   app.config['DEBUG'] = True
   app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET')
-  app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=6)
+  app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
   app.config.from_mapping(
     SECRET_KEY=getenv('SECRET')
   )
@@ -46,25 +47,25 @@ def create_app(test_config=None):
     response = {"access_token": access_token}
     return response
 
-  @app.route('/profile')
-  @jwt_required() # auth wrap
-  def my_profile():
-    db = get_db()
-    token_results = get_jwt()
-    token_email = token_results['sub']
+  # @app.route('/profile')
+  # @jwt_required() # auth wrap
+  # def my_profile():
+  #   db = get_db()
+  #   token_results = get_jwt()
+  #   token_email = token_results['sub']
 
-    find_user = db.query(User).filter(User.email == token_email).one()
-    print('------- found user ---------')
-    print(find_user.id)
-    print(find_user.username)
-    print(find_user.email)
-    print(find_user.password)
-    print('------- found user ---------')
-    response_body = {
-      'username': find_user.username,
-      'email': find_user.email
-    }
-    return response_body
+  #   find_user = db.query(User).filter(User.email == token_email).one()
+  #   print('------- found user ---------')
+  #   print(find_user.id)
+  #   print(find_user.username)
+  #   print(find_user.email)
+  #   print(find_user.password)
+  #   print('------- found user ---------')
+  #   response_body = {
+  #     'username': find_user.username,
+  #     'email': find_user.email
+  #   }
+  #   return response_body
 
   @app.route("/logout", methods=["POST"])
   def logout():
@@ -91,6 +92,8 @@ def create_app(test_config=None):
 
 
   app.register_blueprint(api)
+  app.register_blueprint(profile)
+  app.register_blueprint(file)
   init_db(app)
 
 

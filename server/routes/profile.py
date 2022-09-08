@@ -10,26 +10,29 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
 from server.models import User, File
 from server.db import get_db
 
-bp = Blueprint('api', __name__, url_prefix='/api')
+bp = Blueprint('profile', __name__, url_prefix='/profile')
 
-@bp.route('/file', methods=['POST']) 
-@jwt_required() # auth wrap
+@bp.route('/')
+@jwt_required()
 def test():
   db = get_db()
-
+  print('route hit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   token_results = get_jwt()
   email = token_results['sub']
-
+  file_dict= {}
+  counter = 0
   user = db.query(User).filter(User.email == email).one()
-  fileName = request.json.get("fileName")
-  print(fileName)
+  files = db.query(File).filter(File.user_id == user.id).all()
 
-  newFile = File(
-    title = fileName,
-    user_id = user.id
-  )
+  for row in files:
+    file_dict[counter] = {
+      "id": row.id,
+      "user": user.username,
+      "title": row.title,
+      "collaborators": row.collaborators
+    }
+    counter += 1
 
-  db.add(newFile)
-  db.commit()
+  print(file_dict)
+  return { "files": file_dict }
 
-  return { "message": "File successfully added!"}
