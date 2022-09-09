@@ -7,3 +7,30 @@
   transition: 1s;
   cursor: pointer;
 }
+
+.plus {
+  --b: 4px; /* the thickness */
+  width: 40px; /* the size */
+  aspect-ratio: 1;
+  border: 10px solid #00BE8F; /* the outer space */
+  background:
+    conic-gradient(from 90deg at var(--b) var(--b),#00BE8F 90deg,#fff 0) 
+    calc(100% + var(--b)/2) calc(100% + var(--b)/2)/
+    calc(50%  + var(--b))   calc(50%  + var(--b));
+  display: inline-block;
+}
+
+.radius {
+  border-radius: 50%;
+}
+
+.minus {
+  --b: 4px; /* the thickness */
+  width: 40px; /* the size */
+  aspect-ratio: 1;
+  border: 10px solid #00BE8F; /* the outer space */
+  display: inline-block;
+  color: black;
+  font-weight: bold;
+  cursor: default;
+}
