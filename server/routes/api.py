@@ -21,15 +21,15 @@ def test():
   email = token_results['sub']
 
   user = db.query(User).filter(User.email == email).one()
-  fileName = request.json.get("fileName")
-  print(fileName)
+  file_name = request.json.get("fileName")
+  print(file_name)
 
-  newFile = File(
-    title = fileName,
+  new_file = File(
+    title = file_name,
     user_id = user.id
   )
 
-  db.add(newFile)
+  db.add(new_file)
   db.commit()
 
   return { "message": "File successfully added!"}
