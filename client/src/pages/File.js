@@ -4,17 +4,19 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import PopupModal from '../components/PopupModal';
 import Modal from 'react-bootstrap/Modal';
+import ContentBlock from "../components/ContentBlock";
 
 
 function File(props) {
 
-  const [fileData, setFileData] = useState(null)
+  const [fileData, setFileData] = useState()
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState('What do you want this content to be called?')
   const [item, setItem] = useState('Content')
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
 
   useEffect(() => {
     getFile()
@@ -36,7 +38,8 @@ function File(props) {
       .then((response) => {
         const res = response.data
         res.access_token && props.setToken(res.access_token)
-        console.log(response)
+        console.log(res)
+        setFileData({ contents: res.contents, title: res.file.title })
       }).catch((error) => {
         if (error.response) {
           console.log(error.response)
@@ -103,6 +106,9 @@ function File(props) {
         </Button>
       </Modal.Footer>
     </Modal>
+    {fileData ? <ContentBlock contents={fileData.contents} title={fileData.title} /> : null}
+    
+    
     </>
   )
 

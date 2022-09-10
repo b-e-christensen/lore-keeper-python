@@ -8,29 +8,20 @@
   cursor: pointer;
 }
 
-.plus {
-  --b: 4px; /* the thickness */
-  width: 40px; /* the size */
-  aspect-ratio: 1;
-  border: 10px solid #00BE8F; /* the outer space */
-  background:
-    conic-gradient(from 90deg at var(--b) var(--b),#00BE8F 90deg,#fff 0) 
-    calc(100% + var(--b)/2) calc(100% + var(--b)/2)/
-    calc(50%  + var(--b))   calc(50%  + var(--b));
-  display: inline-block;
+.table-of-contents {
+  border: 2px solid black;
+  margin: 25px;
+  border-radius: 30px;
+  width: fit-content;
+  text-align: left;
 }
 
-.radius {
-  border-radius: 50%;
+.pl-15 {
+  padding-left: 15px;
 }
 
-.minus {
-  --b: 4px; /* the thickness */
-  width: 40px; /* the size */
-  aspect-ratio: 1;
-  border: 10px solid #00BE8F; /* the outer space */
-  display: inline-block;
-  color: black;
-  font-weight: bold;
-  cursor: default;
+.content-block {
+  text-align: left;
+  margin: 15px;
+  border-bottom: 2px solid darkgray;
 }

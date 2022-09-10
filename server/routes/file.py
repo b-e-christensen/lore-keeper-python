@@ -20,11 +20,10 @@ def get_file():
     token_results = get_jwt()
     email = token_results['sub']
     fileId = request.json.get('fileId')
-    print(fileId)
     # user = db.query(User).filter(User.email == email).one()
     file = db.query(File).filter(File.id == fileId).one()
 
-    contents = db.query(Content).filter(Content.file_id == file.id).all()
+    contents = db.query(Content).filter(Content.file_id == file.id).order_by(Content.number).all()
 
     file_dict = {
         "id": file.id,
