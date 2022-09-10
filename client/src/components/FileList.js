@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
-import axios from "axios";
 
 function File({ file }) {
 
-  
+  // listgroup from bootstrap could be a good addition here. 
   return (
   <a href={'/file/' + file.id}>
   <ul>
