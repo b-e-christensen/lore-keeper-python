@@ -47,10 +47,10 @@ def get_file():
     return {"file": file_dict, "contents": contents_dict}
 
 
-@bp.route('/content', methods=['POST'])
+@bp.route('/content', methods=['POST', 'DELETE'])
 @jwt_required()
 def make_content():
-    print('--------------- route hit ----------------')
+  if request.method == 'POST':
     db = get_db()
     token_results = get_jwt()
     email = token_results['sub']
@@ -65,9 +65,22 @@ def make_content():
         return jsonify("must provide number", 403)
     # elif not int(content_number) and not float(content_number):
     #     return jsonify("must provide number", 403)
+    existing_content = db.query(Content).filter(Content.file_id == file_id).all()
 
-    print(int(content_number))
-    #  not isinstance(content_number, int)
+    parent_number = False
+
+    for row in existing_content:
+      if row.number == content_number:
+        return { "message": "That number is already being used."}
+      # not sure that I care about checking for the 'parent number?'
+      elif isinstance(content_number, float):
+        if not parent_number:
+            if row.number == int(content_number):
+              parent_number = True
+
+    if not parent_number:
+      return { "message": "Parent number does not exist yet!."}
+
 
     new_content = Content(
         title=content_name,
@@ -86,3 +99,34 @@ def make_content():
                 'file_id': file_id,
                 'user_id': user.id
             }}
+
+  elif request.method == 'DELETE':
+    id = request.json.get('content_id')
+    db = get_db()
+    try:
+      db.delete(db.query(Content).filter(Content.id == id).one())
+      db.commit()
+    except: 
+      print(sys.exc_info()[0])
+
+      db.rollback()
+      return jsonify(message = 'Content not found'), 404
+
+    return { "message": "Delete Successful!"}
+
+
+@bp.route('/update', methods=['POST'])
+@jwt_required()
+def update():
+  content_id = request.json.get('content_id')
+  text = request.json.get('text')
+  print(text)
+  db = get_db()
+
+  content = db.query(Content).filter(Content.id == content_id).one()
+
+  content.content = text
+
+  db.commit()
+
+  return { "Text Saved": text }

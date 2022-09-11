@@ -53,6 +53,8 @@ function File(props) {
     console.log('make content function running')
     console.log(document.querySelector("#input-field").value)
     console.log(document.querySelector("#number-input").value)
+    console.log(typeof document.querySelector("#number-input").value)
+    console.log(parseFloat(document.querySelector("#number-input").value))
     console.log(fileId.id)
     axios({
       method: "POST",
@@ -63,14 +65,14 @@ function File(props) {
       data: {
         fileId: fileId.id,
         contentName: document.querySelector("#input-field").value,
-        contentNumber: document.querySelector("#number-input").value
+        contentNumber: parseFloat(document.querySelector("#number-input").value)
       }
     })
       .then((response) => {
         handleClose()
         const res = response.data
         res.access_token && props.setToken(res.access_token)
-        console.log(response)
+        getFile()
       }).catch((error) => {
         if (error.response) {
           console.log(error.response)
@@ -95,7 +97,7 @@ function File(props) {
         <input id="input-field" placeholder="File Name"></input>
       </Modal.Body>
       <Modal.Body className="display-flex justify-center">
-      <input id='number-input' type='number' placeholder='Number for the order of your content'></input>
+      <input id='number-input' type='number' step="0.01" placeholder='Number for the order of your content'></input>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
@@ -106,7 +108,7 @@ function File(props) {
         </Button>
       </Modal.Footer>
     </Modal>
-    {fileData ? <ContentBlock contents={fileData.contents} title={fileData.title} /> : null}
+    {fileData ? <ContentBlock token={props.token} contents={fileData.contents} title={fileData.title} /> : null}
     
     
     </>
