@@ -27,7 +27,7 @@ function ConfirmModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Cancel</Button>
-        <Button variant="danger" onClick={() => {deleteContent(props.id, token, props.onHide)}}>Delete</Button>
+        <Button variant="danger" onClick={() => {deleteContent(props.id, props.file, token, props.onHide, props.rerenderFile)}}>Delete</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -11,7 +11,7 @@ class Content(Base):
     title = Column(String(200), nullable=False)
     # to decide where it falls in the file structure. 
     number = Column(Float, nullable=False)
-    content = Column(String(2000), nullable=True)
+    content = Column(Text, nullable=True)
     image = Column(Text, nullable=True)
     # to show who made the content? 
     user_id = Column(Integer, ForeignKey('users.id'))

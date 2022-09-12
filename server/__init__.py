@@ -1,4 +1,5 @@
 from calendar import month
+from email import message
 from lib2to3.pgen2 import token
 from os import getenv
 from urllib import response
@@ -47,25 +48,28 @@ def create_app(test_config=None):
     response = {"access_token": access_token}
     return response
 
-  # @app.route('/profile')
-  # @jwt_required() # auth wrap
-  # def my_profile():
-  #   db = get_db()
-  #   token_results = get_jwt()
-  #   token_email = token_results['sub']
+  @app.route("/signup", methods=['POST'])
+  def signup():
+    data = request.get_json()
+    db = get_db()
+    try:
+      newUser = User(
+      username = data['username'],
+      email = data['email'],
+      password = data['password']
+      )
+      db.add(newUser)
+      db.commit()
+    except:
+      print(sys.exc_info()[0])
 
-  #   find_user = db.query(User).filter(User.email == token_email).one()
-  #   print('------- found user ---------')
-  #   print(find_user.id)
-  #   print(find_user.username)
-  #   print(find_user.email)
-  #   print(find_user.password)
-  #   print('------- found user ---------')
-  #   response_body = {
-  #     'username': find_user.username,
-  #     'email': find_user.email
-  #   }
-  #   return response_body
+      # insert failed, so rollback and send error to front end
+      db.rollback()
+      return jsonify(message = 'Signup failed'), 500
+    
+    access_token = create_access_token(identity=data['email'])
+    response = {"access_token": access_token}
+    return response  
 
   @app.route("/logout", methods=["POST"])
   def logout():

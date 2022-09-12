@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 
 
-function ContentBlock({ contents, title, token }) {
+function ContentBlock({ contents, title, token, rerenderFile }) {
   const [contentData, setContentData] = useState()
   const [editState, setEditState] = useState([])
   const [textState, setTextState] = useState({})
@@ -20,8 +20,6 @@ function ContentBlock({ contents, title, token }) {
   })
 
   let fileId = useParams()
-
-  console.log(fileId.id)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -54,8 +52,8 @@ function ContentBlock({ contents, title, token }) {
       [id]: { text: true }
     })
   }
-  const closeTextArea = (id, originalValue) => {
-    if (textState[`${id}`] && textState[`${id}`] != originalValue) {
+  const closeTextArea = (id, originalValue, save) => {
+    if (textState[`${id}`] && textState[`${id}`] != originalValue && !save) {
       let close = window.confirm('You have unsaved changes!')
       if (!close) {
         return
@@ -76,7 +74,7 @@ function ContentBlock({ contents, title, token }) {
 
   return (
     <>
-      <ConfirmModal show={modalShow.boolean} onHide={() => setModalShow({boolean: false, number: '', title: '', content_id: ''})} number={modalShow.number} title={modalShow.title} id={modalShow.content_id}/>
+      <ConfirmModal show={modalShow.boolean} onHide={() => setModalShow({boolean: false, number: '', title: '', content_id: ''})} number={modalShow.number} title={modalShow.title} id={modalShow.content_id} file={fileId.id} rerenderFile={rerenderFile}/>
       <div className="table-of-contents">
         <table className="m-4">
           <tbody>
@@ -108,7 +106,7 @@ function ContentBlock({ contents, title, token }) {
                         <input name="image" className="m-2" placeholder="picture change" defaultValue={content.image} onChange={handleFormChange}></input>
                       </form>
                     </div>
-                    <Dropdown.Item onClick={() => updateContent(content.id, fileId.id, formState.title, formState.number, formState.image, token)}>Save Changes</Dropdown.Item>
+                    <Dropdown.Item onClick={() => updateContent(content.id, fileId.id, formState.title, formState.number, formState.image, token, rerenderFile)}>Save Changes</Dropdown.Item>
                     <Dropdown.Item  onClick={() => setModalShow({boolean: true, number: content.number, title: content.title, content_id: content.id})}><span className="delete">Delete</span></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -125,7 +123,7 @@ function ContentBlock({ contents, title, token }) {
 
                 </div>
                 <div className="d-flex flex-column align-items-center btn-div">
-                  <Button variant="secondary" className="custom-btn-attr" onClick={() => saveText(content.id, textState, token)}>Save</Button>
+                  <Button variant="secondary" className="custom-btn-attr" onClick={() => saveText(content.id, textState, token, rerenderFile, closeTextArea, content.id, content.content, true)}>Save</Button>
                   <Button variant="dark" className="custom-btn-attr" onClick={() => closeTextArea(content.id, content.content)}>Close</Button>
                 </div>
               </div>

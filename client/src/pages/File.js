@@ -27,6 +27,10 @@ function File(props) {
     });
   };
 
+  const rerenderFile = () => {
+    getFile(fileId.id, props.token, setFileData)
+  }
+
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
@@ -53,7 +57,7 @@ function File(props) {
       </Modal.Footer>
     </Modal>
 
-    {fileData ? <ContentBlock token={props.token} contents={fileData.contents} title={fileData.title} /> : null}
+    {fileData ? <ContentBlock token={props.token} contents={fileData.contents} title={fileData.title} rerenderFile={rerenderFile} /> : null}
     
     
     </>
