@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from "axios";
+import { login } from '../utils/API'
 
 function Login(props) {
 
@@ -8,38 +9,24 @@ function Login(props) {
       password: ""
     })
 
-    function login(event) {
-      axios({
-        method: "POST",
-        url:"/login",
-        data:{
-          email: loginForm.email,
-          password: loginForm.password
-         }
-      })
-      .then((response) => {
-        props.setToken(response.data.access_token)
-        console.log(response.data)
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-          }
-      })
+    function loginUser(event) {
+      event.preventDefault()
+
+      login(loginForm.email, loginForm.password, props.setToken)
 
       setloginForm(({
         email: "",
         password: ""}))
 
-      event.preventDefault()
     }
 
     function handleChange(event) { 
       const {value, name} = event.target
-      setloginForm(prevNote => ({
-          ...prevNote, [name]: value})
-      )}
+      setloginForm({
+          ...loginForm, 
+          [name]: value
+        })
+      }
 
     return (
       <div>
@@ -58,7 +45,7 @@ function Login(props) {
                   placeholder="Password" 
                   value={loginForm.password} />
 
-          <button onClick={login}>Submit</button>
+          <button onClick={loginUser}>Submit</button>
         </form>
       </div>
     );

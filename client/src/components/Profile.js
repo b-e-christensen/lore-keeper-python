@@ -1,24 +1,22 @@
 import { useEffect, useState } from 'react'
-import axios from "axios";
 import FileList from './FileList';
 import Button from 'react-bootstrap/Button';
 import PopupModal from './PopupModal';
+import { getUserData, makeFile } from '../utils/API'
 
 
 function Profile(props) {
 
   const [profileData, setProfileData] = useState(null)
-
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState({ boolean: false, name: '' });
   const [title, setTitle] = useState('What do you want this file to be called?')
   const [item, setItem] = useState('File')
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShow({ boolean: false, name: '' });
+  const handleShow = () => setShow({ boolean: true, name: '' });
 
   let files
   useEffect(() => {
-    getUserData()
+    getUserData(props.token, setProfileData)
   }, [])
 
   if (profileData) {
@@ -26,59 +24,12 @@ function Profile(props) {
     console.log(files)
   }
 
-  function getUserData() {
-    axios({
-      method: 'GET',
-      url: "/profile",
-      headers: {
-        Authorization: 'Bearer ' + props.token
-      }
-    })
-      .then((response) => {
-        const res = response.data
-        res.access_token && props.setToken(res.access_token)
-        setProfileData(res.files)
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        }
-      })
-  }
-
-  function makeFile() {
-    axios({
-      method: "POST",
-      url: "/api/file",
-      data: {
-        fileName: document.querySelector("#input-field").value
-      },
-      headers: {
-        Authorization: 'Bearer ' + props.token
-      }
-    })
-    .then((response) => {
-      handleClose()
-      props.setToken(response.data.access_token)
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-        }
-    })
-  }
-
   return (
     <div className="Profile">
-
       <Button variant="primary" onClick={handleShow}>
         Make New File
       </Button>
-      <PopupModal show={show} handleClose={handleClose} title={title} item={item} onClick={makeFile} />
-
-
+      <PopupModal show={show} handleClose={handleClose} title={title} item={item} onClick={() => makeFile(show.name, props.token, handleClose)} setShow={setShow} />
       <div className='content'>
         {files ? (files.map((file) => {
           return (
@@ -86,8 +37,6 @@ function Profile(props) {
           )
         })) : (null)}
       </div>
-
-
     </div>
   );
 }
