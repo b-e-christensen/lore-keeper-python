@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import unique
 from server.db import Base
-from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime, Float, BLOB
+from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime, Float, BLOB, Text
 from sqlalchemy.orm import relationship
 
 
@@ -12,7 +12,7 @@ class Content(Base):
     # to decide where it falls in the file structure. 
     number = Column(Float, nullable=False)
     content = Column(String(2000), nullable=True)
-    image = Column(String, nullable=True)
+    image = Column(Text, nullable=True)
     # to show who made the content? 
     user_id = Column(Integer, ForeignKey('users.id'))
     file_id = Column(Integer, ForeignKey('files.id'))

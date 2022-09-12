@@ -1,39 +1,12 @@
-import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import useToken from './useToken';
+import { deleteContent } from "../utils/API"
 
 function ConfirmModal(props) {
 
   const { token, removeToken, setToken } = useToken();
 
-  const deleteContent = (id) => {
-    console.log(props.id)
-    console.log(id)
-    console.log('delete running')
-    axios({
-      method: "DELETE",
-      url: "/file/content",
-      headers: {
-        Authorization: 'Bearer ' + token
-      },
-      data: {
-        content_id: id
-      }
-    })
-    .then((response) => {
-      props.onHide()
-      const res = response.data
-      res.access_token && setToken(res.access_token)
-      console.log(res)
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      }
-    })
-  }
 
   return (
     <Modal
@@ -54,7 +27,7 @@ function ConfirmModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Cancel</Button>
-        <Button variant="danger" onClick={() => {deleteContent(props.id)}}>Delete</Button>
+        <Button variant="danger" onClick={() => {deleteContent(props.id, token, props.onHide)}}>Delete</Button>
       </Modal.Footer>
     </Modal>
   );

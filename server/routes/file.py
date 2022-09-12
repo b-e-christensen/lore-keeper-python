@@ -1,4 +1,5 @@
 
+from email import message
 from os import access, getenv
 from flask import Flask, request, Blueprint
 from server.db import init_db
@@ -9,6 +10,8 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
     unset_jwt_cookies, jwt_required, JWTManager
 from server.models import User, File, Content
 from server.db import get_db
+
+from server.helpers import check_for_existing_number
 
 bp = Blueprint('file', __name__, url_prefix='/file')
 
@@ -67,20 +70,10 @@ def make_content():
     #     return jsonify("must provide number", 403)
     existing_content = db.query(Content).filter(Content.file_id == file_id).all()
 
-    parent_number = False
-
-    for row in existing_content:
-      if row.number == content_number:
-        return { "message": "That number is already being used."}
-      # not sure that I care about checking for the 'parent number?'
-      elif isinstance(content_number, float):
-        if not parent_number:
-            if row.number == int(content_number):
-              parent_number = True
-
-    if not parent_number:
+    number_check = check_for_existing_number(existing_content, content_number)
+    
+    if not number_check:
       return { "message": "Parent number does not exist yet!."}
-
 
     new_content = Content(
         title=content_name,
@@ -130,3 +123,26 @@ def update():
   db.commit()
 
   return { "Text Saved": text }
+
+@bp.route('/content/update', methods=['POST'])
+@jwt_required()
+def update_content():
+  data = request.get_json()
+  db = get_db()
+
+  existing_content = db.query(Content).filter(Content.file_id == data['file_id']).all()
+  content = db.query(Content).filter(Content.id == data['content_id']).one()
+
+  if content.number != data['number']:
+    number_check = check_for_existing_number(existing_content, data['number'])
+    if not number_check:
+      return { "message": "Parent number does not exist yet!."}
+
+
+  content.title = data['title']
+  content.number = data['number']
+  content.image = data['image']
+  
+  db.commit()
+
+  return jsonify(message = 'you did it!')

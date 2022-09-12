@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ConfirmModal from "./ConfirmModal";
-import { saveText } from "../utils/API"
+import { saveText, updateContent } from "../utils/API"
+import { useParams } from "react-router-dom";
 
 
 
@@ -18,6 +19,10 @@ function ContentBlock({ contents, title, token }) {
     setContentData(contents)
   })
 
+  let fileId = useParams()
+
+  console.log(fileId.id)
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -31,6 +36,7 @@ function ContentBlock({ contents, title, token }) {
     const { name, value } = event.target
     let formObject = formState
     formObject[`${name}`] = value
+    console.log(formState)
     setFormState(formObject)
   }
 
@@ -91,17 +97,18 @@ function ContentBlock({ contents, title, token }) {
               <div className="d-flex">
                 <h1>{content.number}. {content.title}</h1>
 
-                <Dropdown onClick={() => setFormState({title: '', number: null, image: ''})}>
+                <Dropdown onClick={() => setFormState({title: content.title, number: content.number, image: content.image})}>
                   <Dropdown.Toggle split variant="success" id="dropdown-split-basic"/>
                   <Dropdown.Menu onClick={(event) => event.stopPropagation()}>
                     <div>
+                    <h5>Change values to edit</h5>
                       <form>
                         <input name="title" className="m-2" type='text' placeholder="name change" defaultValue={content.title} onChange={handleFormChange}></input>
                         <input name="number" className="m-2" type='number' step="0.01" placeholder="number change" defaultValue={content.number} onChange={handleFormChange}></input>
                         <input name="image" className="m-2" placeholder="picture change" defaultValue={content.image} onChange={handleFormChange}></input>
                       </form>
                     </div>
-                    <Dropdown.Item >Save Changes</Dropdown.Item>
+                    <Dropdown.Item onClick={() => updateContent(content.id, fileId.id, formState.title, formState.number, formState.image, token)}>Save Changes</Dropdown.Item>
                     <Dropdown.Item  onClick={() => setModalShow({boolean: true, number: content.number, title: content.title, content_id: content.id})}><span className="delete">Delete</span></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
