@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// WORKS 
-export const saveText = (id, text, token) => {
+// WORKS and RERENDERS
+export const saveText = (id, text, token, func, close, param1, param2, param3) => {
   if (!text[`${id}`]) {
     return
   }
@@ -16,9 +16,15 @@ export const saveText = (id, text, token) => {
       text: text[`${id}`]
     }
   })
+  .then((response) => {
+    // function call to close the text area after save
+    close(param1, param2, param3)
+    // function call to refetch the file data
+    func()
+  })
 }
-// WORKS 
-export const updateContent = (content_id, file_id, title, number, image, token) => {
+// WORKS and RERENDERS
+export const updateContent = (content_id, file_id, title, number, image, token, func) => {
   axios({
     method: "POST",
     url: "/file/content/update",
@@ -32,9 +38,12 @@ export const updateContent = (content_id, file_id, title, number, image, token) 
       image
     }
   })
+  .then(response => func())
 }
-// WORKS
-export const deleteContent = (id, token, onHide) => {
+// WORKS and RERENDERS
+export const deleteContent = (id, fileId, token, onHide, func) => {
+  console.log(id)
+  console.log(fileId)
   axios({
     method: "DELETE",
     url: "/file/content",
@@ -42,10 +51,16 @@ export const deleteContent = (id, token, onHide) => {
       Authorization: 'Bearer ' + token
     },
     data: {
-      content_id: id
+      content_id: id,
+      fileId
     }
   })
-  .then(onHide())
+  .then((response) => {
+    // function to hide modal
+    onHide()
+    // function call to refetch the file data
+    func()
+  })
 }
 // WORKS
 export const getUserData = (token, setState) => {
@@ -58,8 +73,8 @@ export const getUserData = (token, setState) => {
   })
     .then((response) => setState(response.data.files))
 }
-// WORKS
-export const makeFile = (name, token, close) => {
+// WORKS and RERENDERS
+export const makeFile = (name, token, close, func, setState) => {
   axios({
     method: "POST",
     url: "/api/file",
@@ -70,7 +85,9 @@ export const makeFile = (name, token, close) => {
       Authorization: 'Bearer ' + token
     }
   })
-  .then(close())
+  .then((response) => {
+    close()
+    func(token, setState)})
 }
 // WORKS
 export const getFile = (fileId, token, setState) => {
@@ -84,10 +101,15 @@ export const getFile = (fileId, token, setState) => {
       fileId
     }
   })
-    .then((response) => setState({ contents: response.data.contents, title: response.data.file.title })
+    .then((response) => {
+      if(!response.data.file){
+        window.location.href = '/'
+      }
+      setState({ contents: response.data.contents, title: response.data.file.title })
+     }
     )
 }
-// WORKS
+// WORKS and RERENDERS
 export const makeContent = (fileId, contentName, contentNumber, token, close, func, setState) => {
   axios({
     method: "POST",
@@ -102,11 +124,16 @@ export const makeContent = (fileId, contentName, contentNumber, token, close, fu
     }
   })
     .then((response) => {
+      // function call to close modal
       close()
+      // function call to refetch newly updated data.
       func(fileId, token, setState)
     })
 }
 
+export const updateFile = () => {
+  console.log('update file running')
+}
 
 
 // WORKS
@@ -121,6 +148,20 @@ export const login = (email, password, setState) => {
   })
   .then((response) => setState(response.data.access_token))
 }
+// WORKS
+export const signup = (username, email, password, setState) => {
+  axios({
+    method: "POST",
+    url:"/signup",
+    data:{
+      username,
+      email,
+      password
+     }
+  })
+  .then((response) => setState(response.data.access_token))
+}
+
 
 // WORKS (though experienced some strange interaction with it, so going to leave it commented out for now in Header.js)
 export const logout = (removeToken) => {

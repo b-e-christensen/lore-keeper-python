@@ -16,7 +16,6 @@ bp = Blueprint('profile', __name__, url_prefix='/profile')
 @jwt_required()
 def test():
   db = get_db()
-  print('route hit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   token_results = get_jwt()
   email = token_results['sub']
   file_dict= {}

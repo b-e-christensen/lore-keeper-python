@@ -1,7 +1,7 @@
 
 from email import message
 from os import access, getenv
-from flask import Flask, request, Blueprint
+from flask import Flask, request, Blueprint, redirect
 from server.db import init_db
 import json
 import sys
@@ -11,7 +11,7 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
 from server.models import User, File, Content
 from server.db import get_db
 
-from server.helpers import check_for_existing_number
+from server.helpers import check_for_existing_number, file_belongs_to_user
 
 bp = Blueprint('file', __name__, url_prefix='/file')
 
@@ -23,7 +23,10 @@ def get_file():
     token_results = get_jwt()
     email = token_results['sub']
     fileId = request.json.get('fileId')
-    # user = db.query(User).filter(User.email == email).one()
+    auth_check = file_belongs_to_user(email, fileId)
+
+    if not auth_check:
+      return redirect('/')
     file = db.query(File).filter(File.id == fileId).one()
 
     contents = db.query(Content).filter(Content.file_id == file.id).order_by(Content.number).all()
@@ -53,14 +56,19 @@ def get_file():
 @bp.route('/content', methods=['POST', 'DELETE'])
 @jwt_required()
 def make_content():
+  db = get_db()
+  token_results = get_jwt()
+  email = token_results['sub']
+  user = db.query(User).filter(User.email == email).one()
+  file_id = request.json.get('fileId')
+  content_name = request.json.get('contentName')
+  content_number = request.json.get('contentNumber')
+  auth_check = file_belongs_to_user(email, file_id)
+
+  if not auth_check:
+    return redirect('/')
+
   if request.method == 'POST':
-    db = get_db()
-    token_results = get_jwt()
-    email = token_results['sub']
-    user = db.query(User).filter(User.email == email).one()
-    file_id = request.json.get('fileId')
-    content_name = request.json.get('contentName')
-    content_number = request.json.get('contentNumber')
 
     if not content_name:
         return jsonify("must provide a title", 403)
@@ -68,12 +76,13 @@ def make_content():
         return jsonify("must provide number", 403)
     # elif not int(content_number) and not float(content_number):
     #     return jsonify("must provide number", 403)
+    
     existing_content = db.query(Content).filter(Content.file_id == file_id).all()
 
     number_check = check_for_existing_number(existing_content, content_number)
     
     if not number_check:
-      return { "message": "Parent number does not exist yet!."}
+      return { "message": "Parent number does not exist yet!." }
 
     new_content = Content(
         title=content_name,
@@ -95,7 +104,6 @@ def make_content():
 
   elif request.method == 'DELETE':
     id = request.json.get('content_id')
-    db = get_db()
     try:
       db.delete(db.query(Content).filter(Content.id == id).one())
       db.commit()

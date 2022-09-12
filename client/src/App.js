@@ -6,6 +6,7 @@ import useToken from './components/useToken'
 import File from './pages/File'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './cards.css'
 function App() {
   const { token, removeToken, setToken } = useToken();
 
