@@ -17,7 +17,6 @@ from server.models import User, File
 from server.db import get_db
 from server.routes import api, content, profile, file
 
-from flask.helpers import send_from_directory
 
 def create_app(test_config=None):
   # set up app config
@@ -79,6 +78,10 @@ def create_app(test_config=None):
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
+
+  @app.route('/', methods=['GET'])
+  def hello():
+    return jsonify(message="It would be weird if this works?")
 
   @app.after_request
   def refresh_expiring_jwts(response):
