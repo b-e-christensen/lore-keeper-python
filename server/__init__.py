@@ -102,9 +102,9 @@ def create_app(test_config=None):
   
   
   # heroku  guide
-  @app.route('/')
-  def serve():
-    return send_from_directory(app.static_folder)
+  # @app.route('/')
+  # def serve():
+  #   return send_from_directory(app.static_folder)
 
   app.register_blueprint(api)
   app.register_blueprint(profile)
@@ -113,5 +113,3 @@ def create_app(test_config=None):
   init_db(app)
 
   return app
-
-server = create_app()
