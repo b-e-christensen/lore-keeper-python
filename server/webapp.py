@@ -1,3 +1,3 @@
-import server as webapp
+from server import server
 
-app = webapp
+app = server

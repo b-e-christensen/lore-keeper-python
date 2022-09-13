@@ -100,5 +100,6 @@ def create_app(test_config=None):
   app.register_blueprint(content)
   init_db(app)
 
-  server = app
   return app
+
+server = create_app()
