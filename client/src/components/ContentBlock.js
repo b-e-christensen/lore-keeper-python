@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 
 
-function ContentBlock({ contents, title, token, rerenderFile }) {
+function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
   const [contentData, setContentData] = useState()
   const [editState, setEditState] = useState([])
   const [textState, setTextState] = useState({})
@@ -34,7 +34,6 @@ function ContentBlock({ contents, title, token, rerenderFile }) {
     const { name, value } = event.target
     let formObject = formState
     formObject[`${name}`] = value
-    console.log(formState)
     setFormState(formObject)
   }
 
@@ -86,20 +85,23 @@ function ContentBlock({ contents, title, token, rerenderFile }) {
             })) : (null)}
           </tbody>
         </table>
+        <Button variant="dark" className='m-3 mt-0' onClick={handleShow}>
+        Make New Content
+      </Button>
       </div>
 
       {content ? (content.map((content) => {
         return (
           <div key={content.id} id={content.title} className="content-block">
-            <div className="d-flex justify-space-between">
+            <div className="d-flex justify-space-between align-items-center">
               <div className="d-flex">
-                <h1>{content.number}. {content.title}</h1>
+                <h2>{content.number}. {content.title}</h2>
 
-                <Dropdown onClick={() => setFormState({title: content.title, number: content.number, image: content.image})}>
-                  <Dropdown.Toggle split variant="success" id="dropdown-split-basic"/>
-                  <Dropdown.Menu onClick={(event) => event.stopPropagation()}>
+                <Dropdown className='mt-2 ml-2' onClick={() => setFormState({title: content.title, number: content.number, image: content.image})}>
+                  <Dropdown.Toggle split variant="dark" id="dropdown-split-basic"/>
+                  <Dropdown.Menu className="dropdown-menu" onClick={(event) => event.stopPropagation()}>
                     <div>
-                    <h5>Change values to edit</h5>
+                    <h5>Edit</h5>
                       <form>
                         <input name="title" className="m-2" type='text' placeholder="name change" defaultValue={content.title} onChange={handleFormChange}></input>
                         <input name="number" className="m-2" type='number' step="0.01" placeholder="number change" defaultValue={content.number} onChange={handleFormChange}></input>
@@ -111,7 +113,7 @@ function ContentBlock({ contents, title, token, rerenderFile }) {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-              <Button variant="success" onClick={() => showTextArea(content.id)}>Add Description</Button>
+              <Button variant="dark" className="h-fit-content" onClick={() => showTextArea(content.id)}>Add Description</Button>
 
             </div>
 
@@ -124,10 +126,10 @@ function ContentBlock({ contents, title, token, rerenderFile }) {
                 </div>
                 <div className="d-flex flex-column align-items-center btn-div">
                   <Button variant="secondary" className="custom-btn-attr" onClick={() => saveText(content.id, textState, token, rerenderFile, closeTextArea, content.id, content.content, true)}>Save</Button>
-                  <Button variant="dark" className="custom-btn-attr" onClick={() => closeTextArea(content.id, content.content)}>Close</Button>
+                  <Button variant="light" className="custom-btn-attr" onClick={() => closeTextArea(content.id, content.content)}>Close</Button>
                 </div>
               </div>
-            ) : (<p>{content.content}</p>)}
+            ) : (<p className="ml-5">{content.content}</p>)}
           </div>
         )
       })) : (null)}

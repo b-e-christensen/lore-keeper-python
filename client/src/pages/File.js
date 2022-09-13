@@ -33,9 +33,6 @@ function File(props) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Make New Content
-      </Button>
 
       <Modal show={show.boolean} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -57,7 +54,7 @@ function File(props) {
       </Modal.Footer>
     </Modal>
 
-    {fileData ? <ContentBlock token={props.token} contents={fileData.contents} title={fileData.title} rerenderFile={rerenderFile} /> : null}
+    {fileData ? <ContentBlock token={props.token} contents={fileData.contents} title={fileData.title} rerenderFile={rerenderFile} handleShow={handleShow} /> : null}
     
     
     </>

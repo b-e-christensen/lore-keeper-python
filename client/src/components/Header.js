@@ -3,28 +3,13 @@ import { logout } from "../utils/API"
 
 function Header(props) {
 
-  // function logout() {
-  //   axios({
-  //     method: "POST",
-  //     url: "/logout",
-  //   })
-  //     .then((response) => {
-  //       props.removeToken()
-  //     }).catch((error) => {
-  //       if (error.response) {
-  //         console.log(error.response)
-  //         console.log(error.response.status)
-  //         console.log(error.response.headers)
-  //       }
-  //     })
-  // }
-
   return (
-    <header className="App-header flex-row">
+    <header className="header display-flex justify-space-between">
+    <a href='/'><h3>Lore Keeper</h3></a>
       {props.loggedIn ?
         (
           <>
-            <Button variant="success" className="justify-flex-end" onClick={() => logout(props.removeToken)}>
+            <Button variant="dark" className='h-fit-content mr-3' onClick={() => logout(props.removeToken)}>
               Logout
             </Button>
           </>

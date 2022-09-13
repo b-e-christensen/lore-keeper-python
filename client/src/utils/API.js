@@ -7,7 +7,7 @@ export const saveText = (id, text, token, func, close, param1, param2, param3) =
   }
   axios({
     method: "POST",
-    url: "/file/update",
+    url: "/file/text/update",
     headers: {
       Authorization: 'Bearer ' + token
     },
@@ -42,8 +42,6 @@ export const updateContent = (content_id, file_id, title, number, image, token, 
 }
 // WORKS and RERENDERS
 export const deleteContent = (id, fileId, token, onHide, func) => {
-  console.log(id)
-  console.log(fileId)
   axios({
     method: "DELETE",
     url: "/file/content",
@@ -71,7 +69,8 @@ export const getUserData = (token, setState) => {
       Authorization: 'Bearer ' + token
     }
   })
-    .then((response) => setState(response.data.files))
+    .then((response) => {
+      setState(response.data.files)})
 }
 // WORKS and RERENDERS
 export const makeFile = (name, token, close, func, setState) => {
@@ -130,11 +129,43 @@ export const makeContent = (fileId, contentName, contentNumber, token, close, fu
       func(fileId, token, setState)
     })
 }
-
-export const updateFile = () => {
-  console.log('update file running')
+// WORKS and RERENDERS
+export const postFile = (token, id, title, tagline, image, func, setState) => {
+  axios({
+    method: "POST",
+    url: "/file/update",
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    data: {
+      id,
+      title,
+      tagline,
+      image
+    }
+  })
+  .then(response => func())
 }
 
+// WORKS and RERENDERS
+export const deleteFile = (token, id, onHide, func) => {
+  console.log(token)
+  console.log(id)
+  axios({
+    method: "DELETE",
+    url: "/file/update",
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    data: {
+      id
+    }
+  })
+  .then((response) => {
+    onHide()
+    func()
+  })
+}
 
 // WORKS
 export const login = (email, password, setState) => {

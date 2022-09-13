@@ -1,11 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import useToken from './useToken';
-import { deleteContent } from "../utils/API"
+import { deleteContent, deleteFile } from "../utils/API"
 
 function ConfirmModal(props) {
 
   const { token, removeToken, setToken } = useToken();
+
+  console.log(props)
 
 
   return (
@@ -27,7 +29,11 @@ function ConfirmModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Cancel</Button>
-        <Button variant="danger" onClick={() => {deleteContent(props.id, props.file, token, props.onHide, props.rerenderFile)}}>Delete</Button>
+        {props.deletefile ? (
+          <Button variant="danger" onClick={() => {deleteFile(token, props.id, props.onHide, props.refetchUserData)}}>Delete File</Button>
+        ) : (
+          <Button variant="danger" onClick={() => {deleteContent(props.id, props.file, token, props.onHide, props.rerenderFile)}}>Delete Content</Button>
+        )}
       </Modal.Footer>
     </Modal>
   );
