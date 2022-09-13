@@ -28,6 +28,8 @@ def test():
       "id": row.id,
       "user": user.username,
       "title": row.title,
+      "tagline": row.tagline,
+      "image": row.image,
       "collaborators": row.collaborators
     }
     counter += 1

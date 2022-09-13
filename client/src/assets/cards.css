@@ -15,18 +15,6 @@
 	--index: 1;
 }
 
-#card_2 {
-	--index: 2;
-}
-
-#card_3 {
-	--index: 3;
-}
-
-#card_4 {
-	--index: 4;
-}
-
 .card {
 	position: sticky;
 	top: 0;
@@ -81,7 +69,7 @@
 /** DEBUG **/
 
 #debug {
-  position: fixed;
+  /* position: fixed; */
   top: 1em;
   left: 1em;
 }
@@ -116,10 +104,6 @@ main {
 	list-style: none;
 	outline: calc(var(--outline-width) * 10) solid blue;
 	
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: repeat(var(--numcards), var(--card-height));
-	gap: var(--card-margin);
 }
 
 .card {
@@ -189,3 +173,4 @@ aside {
 aside p {
 	margin-bottom: 1em;
 }
+
