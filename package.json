@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cd server && flask run",
     "test": "echo \"Error: no test specified\" && exit 1",
     "develop": "concurrently \"cd server && flask run --no-debugger\" \"cd client && npm start\"",
     "install": "cd client && npm i",
