@@ -21,7 +21,7 @@ from flask.helpers import send_from_directory
 
 def create_app(test_config=None):
   # set up app config
-  app = Flask(__name__, static_folder='client/build', static_url_path='')
+  app = Flask(__name__, static_folder='../client/build', static_url_path='')
   app.url_map.strict_slashes = False
   app.config['DEBUG'] = True
   app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET')
