@@ -6,6 +6,7 @@ import useToken from './components/useToken'
 import File from './pages/File'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/cards.css'
+import Test from './components/Test'
 function App() {
   const { token, removeToken, setToken } = useToken();
 
@@ -21,8 +22,12 @@ function App() {
           <>
           <Header token={token} removeToken={removeToken} loggedIn={true}/> 
             <Routes>
-              <Route exact path="/" element={<Profile token={token} setToken={setToken}/>}></Route>
+              <Route path="/" element={<Profile token={token} setToken={setToken}/>}></Route>
               <Route path="/file/:id" element={<File token={token} setToken={setToken}/>}></Route>
+              <Route
+              path='/test'
+              element={<Test />}
+              />
             </Routes>
           </>
         )}
