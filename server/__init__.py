@@ -94,6 +94,7 @@ def create_app(test_config=None):
         # Case where there is not a valid JWT. Just return the original respone
         return response
 
+  server = app
   app.register_blueprint(api)
   app.register_blueprint(profile)
   app.register_blueprint(file)
