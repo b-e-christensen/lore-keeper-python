@@ -149,6 +149,6 @@ Project Link: [https://github.com/b-e-christensen/lore-keeper-python](https://gi
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* Codepen user [Bramus](https://codepen.io/bramus) for the **awesome** card layout of the home page. 
+* Thanks Codepen user [Bramus](https://codepen.io/bramus) for the **awesome** card layout of the home page. 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
