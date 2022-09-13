@@ -33,7 +33,7 @@
 * Concept and Motivation: I love stories. I love watching them, reading, hearing, writing, imagining them. Lore Keeper was built with stories in mind. We are all natural story tellers, so it felt just as natural to provide a program to aid that in some way. Lore Keeper is intended to be used to help you keep track of any kind of expansive story (simple ones are welcome too!). The app keeps each story in its own 'file,' as I have been referring to them, and the user is able to break apart their story as they see fit in that file. The project is at its simplest, currently, with the ability to make, edit, and delete files, and make, edit, and delete content within those files. Even in its current state it can be leveraged as a powerful tool to aid in the telling of a story, with many more feautres on the horizon that will bring its capabilities to higher heights.  
 
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right">(<a href="#top">back to top</a>)</p> 
 
 ![generated HTML screen shot](./readme-images/file.png)
 
