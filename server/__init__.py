@@ -7,18 +7,22 @@ from flask import Flask, request
 from server.db import init_db
 import json
 import sys
+
 from flask import Flask, request, jsonify
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
+
 from server.models import User, File
 from server.db import get_db
 from server.routes import api, content, profile, file
 
+from flask_cors import CORS, cross_origin
+from flask.helpers import send_from_directory
 
 def create_app(test_config=None):
   # set up app config
-  app = Flask(__name__, static_folder='../client/build/static', static_url_path='/')
+  app = Flask(__name__, static_folder='../client/build', static_url_path='')
   app.url_map.strict_slashes = False
   app.config['DEBUG'] = True
   app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET')
@@ -26,6 +30,8 @@ def create_app(test_config=None):
   app.config.from_mapping(
     SECRET_KEY=getenv('SECRET')
   )
+
+  CORS(app)
 
   jwt = JWTManager(app)
 
@@ -93,6 +99,12 @@ def create_app(test_config=None):
     except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
+  
+  
+  # heroku  guide
+  @app.route('/')
+  def serve():
+    return send_from_directory(app.static_folder)
 
   app.register_blueprint(api)
   app.register_blueprint(profile)
