@@ -1,1 +1,1 @@
-web: gunicorn server:server
+web: gunicorn -w 4 "server:create_app()" -t 120
