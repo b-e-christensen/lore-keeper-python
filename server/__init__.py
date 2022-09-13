@@ -20,7 +20,7 @@ from server.routes import api, content, profile, file
 
 def create_app(test_config=None):
   # set up app config
-  app = Flask(__name__, static_folder='../client/build', static_url_path='')
+  app = Flask(__name__, static_folder='../client/build', static_url_path='/')
   app.url_map.strict_slashes = False
   app.config['DEBUG'] = True
   app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET')
@@ -30,6 +30,9 @@ def create_app(test_config=None):
   )
 
   jwt = JWTManager(app)
+  @app.route('/', methods=['GET'])
+  def index():
+    return app.send_static_file('index.html')
 
   @app.route('/login', methods=["POST"])
   def login():
@@ -79,9 +82,7 @@ def create_app(test_config=None):
     unset_jwt_cookies(response)
     return response
 
-  @app.route('/', methods=['GET'])
-  def hello():
-    return jsonify(message="It would be weird if this works?")
+
 
   @app.after_request
   def refresh_expiring_jwts(response):
