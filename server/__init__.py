@@ -18,7 +18,7 @@ from server.routes import api, content, profile, file
 
 def create_app(test_config=None):
   # set up app config
-  app = Flask(__name__, static_url_path='/', static_folder='../client/build')
+  app = Flask(__name__, static_url_path='*', static_folder='../client/build')
   app.url_map.strict_slashes = False
   app.config['DEBUG'] = True
   app.config["JWT_SECRET_KEY"] = getenv('JWT_SECRET')
