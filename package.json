@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "develop": "concurrently \"cd server && flask run --no-debugger\" \"cd client && npm start\"",
     "install": "cd client && npm i",
-    "pip-install": "cd server && /venv/Scripts/activate && pip install -r requirements.txt"
+    "pip-install": "cd server && /venv/Scripts/activate && pip install -r requirements.txt",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run install && npm run build"
   },
   "repository": {
     "type": "git",
