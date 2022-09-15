@@ -25,7 +25,7 @@ function PopupModal({ show, handleClose, title, item, onClick, setShow }) {
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="display-flex justify-center">
+      <Modal.Body className="display-flex justify-center popul-modal">
         <input id="input-field" name="name" placeholder="File Name" onChange={handleChange}></input>
       </Modal.Body>
       <Modal.Body className="display-flex justify-center">

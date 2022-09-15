@@ -1,18 +1,12 @@
-from calendar import month
-from email import message
-from lib2to3.pgen2 import token
 from os import getenv
-from urllib import response
 from flask import Flask, request
 from server.db import init_db
 import json
 import sys
-
 from flask import Flask, request, jsonify
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
-
 from server.models import User, File
 from server.db import get_db
 from server.routes import api, content, profile, file

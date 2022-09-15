@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import FileList from './FileList';
+import FileList from '../components/FileList';
 import Button from 'react-bootstrap/Button';
-import PopupModal from './PopupModal';
-import ConfirmModal from "./ConfirmModal";
+import PopupModal from '../components/PopupModal';
+import ConfirmModal from "../components/ConfirmModal";
 import { getUserData, makeFile } from '../utils/API'
 
 
