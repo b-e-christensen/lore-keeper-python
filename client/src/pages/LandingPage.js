@@ -1,24 +1,38 @@
-import Navbar from "../components/Navbar";
+import Login from "../components/Login";
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 
-function LandingPage() {
+const popover = (
+  <Popover id="popover-basic">
+    {/* <Popover.Header as="h3">Popover right</Popover.Header> */}
+    <Popover.Body>
+    Lore Keeper is built with stories in mind. We are all natural story tellers, so we here at Lore Keeper wanted to aid people in telling them.
+    <br></br>
+      <ol>
+        <li>Create an account.</li>
+        <li>Make files.</li>
+        <li>Add sections.</li>
+        <li>Exapand your world.</li>
+      </ol>
+      It's as simple as that! 
+    </Popover.Body>
+  </Popover>
+);
+
+function LandingPage({ setToken }) {
   return (
-    <>
-    <Navbar /> 
-    <div className="display-flex flex-column h-100 justify-space-around">
-      <div className="flex-row">
-      <button className="btn">The Lore Keeper</button>
-      <button className="btn">Get Started</button>
+
+    <div className="landing-page-div w-100">
+      <div className="display-flex justify-content-center">
+        <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+          <h4 className="mt-2 login-change">Make a world</h4>
+        </OverlayTrigger>
       </div>
-      <div>
-      <button className="btn">Go on an adventure</button>
-      <form>
-        <input 
-        type='text'
-        placeholder='search'></input>
-      </form>
-      </div>
+      <Login setToken={setToken} />
+
     </div>
-    </>
+
   )
 }
 

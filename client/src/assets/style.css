@@ -63,7 +63,6 @@
 }
 
 .dropdown-menu form {
-  /* margin: 10px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,7 +74,7 @@
   margin-top: 10px;
 }
 
-.dropdown-menu form input {
+input {
   width: 85%;
   padding: 0.45rem;
   color: var(--text-primary);
@@ -102,4 +101,43 @@
   text-decoration: none;
   color: white;
   margin: 1rem;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+}
+
+.login-div {
+  background-color: white;
+  border-radius: 5%;
+}
+
+.login input {
+  margin: 5px;
+}
+
+.login-change {
+  color: #7CB9E8;
+}
+
+.login-change h4 {
+  text-decoration: underline;
+}
+
+
+.login-change:hover {
+  text-decoration: underline;
+  text-decoration-color: #7CB9E8;
+  cursor: pointer;
+}
+
+
+.landing-page-div {
+  background-image: url('./images/desk.jpg');
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
 }

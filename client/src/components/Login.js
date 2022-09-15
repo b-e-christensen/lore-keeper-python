@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 import { login, signup } from '../utils/API'
 
 function Login(props) {
@@ -7,6 +8,7 @@ function Login(props) {
   const [loginForm, setloginForm] = useState({ email: "", password: "" })
   const [signupForm, setSignupForm] = useState({ username: "", email: "", password: "", checkPassword: "" })
   const [alertState, setAlertState] = useState({ show: false, message: '' });
+  const [loginState, setLoginState] = useState(true)
 
   function loginUser(event) {
     event.preventDefault()
@@ -71,8 +73,11 @@ function Login(props) {
         {alertState.message}
       </Alert> : (null)}
 
-      <div>
-        <h1>Login</h1>
+
+      {loginState ? (
+        <div className='flex-column align-content-center justify-content-center min-100-vh'>
+        <div className='login-div mt-5'>
+        <h4 className='text-center mt-2'>Login</h4>
         <form className="login">
           <input onChange={handleChange}
             type="email"
@@ -86,13 +91,15 @@ function Login(props) {
             name="password"
             placeholder="Password"
             value={loginForm.password} />
-
-          <button onClick={loginUser}>Submit</button>
+            <Button variant="dark" className='m-4' onClick={loginUser}>Login</Button>
         </form>
+        </div>
+        <p className='text-center login-change' onClick={() => setLoginState(false)}>Don't have an account? Signup!</p>
       </div>
-
-      <div>
-        <h1>Signup</h1>
+      ) : ( 
+        <div className='flex-column align-content-center justify-content-center min-100-vh'>
+        <div className='login-div mt-5'>
+        <h4 className='text-center mt-2'>Signup</h4>
         <form className="login">
           <input onChange={handleSignupChange}
             type="text"
@@ -116,12 +123,14 @@ function Login(props) {
             type="password"
             text={signupForm.password}
             name="checkPassword"
-            placeholder="Password"
+            placeholder="Repeat password"
             value={signupForm.checkPassword} />
-
-          <button onClick={signupUser}>Submit</button>
+            <Button variant="dark" className='m-4' onClick={signupUser}>Signup</Button>
         </form>
+        </div>
+        <p className='text-center login-change' onClick={() => setLoginState(true)}>Already have an account? Login!</p>
       </div>
+      )}
     </>
   );
 }
