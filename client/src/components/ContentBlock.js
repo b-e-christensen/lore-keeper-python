@@ -151,7 +151,7 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
                     {content.content ? <textarea name={content.id} defaultValue={content.content} onChange={handleChange} placeholder='description' className="w-100"></textarea> : <textarea name={content.id} onChange={handleChange} placeholder='description' className="w-100"></textarea>}
 
                   </div>
-                  <div className="d-flex flex-column align-items-center btn-div">
+                  <div className="flex-column align-items-center btn-div">
                     <Button variant="secondary" className="custom-btn-attr" onClick={() => saveText(content.id, textState, token, rerenderFile, closeTextArea, content.id, content.content, true)}>Save</Button>
                     <Button variant="light" className="custom-btn-attr" onClick={() => closeTextArea(content.id, content.content)}>Close</Button>
                   </div>
