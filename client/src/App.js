@@ -35,22 +35,10 @@ function App() {
               />
               <Routes>
 
-                <Route
-                  path="/"
-                  element={<Profile token={token} setToken={setToken} />}>
-                </Route>
-                <Route
-                  path="/file/:id"
-                  element={<File token={token} setToken={setToken} />}>
-                </Route>
-                <Route
-                  path="/tagged/:file_id/:tag_id"
-                  element={<TaggedContent token={token} />}>
-                </Route>
-                <Route
-                  path="/hello"
-                  element={<h1> Hello !</h1>}>
-                </Route>
+                <Route path="/" element={<Profile token={token} setToken={setToken} />}></Route>
+                <Route path="/file/:id" element={<File token={token} setToken={setToken} />}></Route>
+                <Route path="/tagged/:file_id/:tag_id" element={<TaggedContent token={token} />}></Route>
+                <Route path="/hello" element={<h1>Hello!</h1>}></Route>
 
               </Routes>
             </>
