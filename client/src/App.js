@@ -47,6 +47,10 @@ function App() {
                   path="/tagged/:file_id/:tag_id"
                   element={<TaggedContent token={token} />}>
                 </Route>
+                <Route
+                  path="/test"
+                  element={<h1>Hello!</h1>}>
+                </Route>
 
               </Routes>
             </>
