@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import ConfirmModal from "./ConfirmModal";
-import { saveText, updateContent } from "../utils/API"
+import ConfirmModal from "./modals/Confirm";
+import { saveText, updateContent, addTag } from "../utils/API"
 import { useParams } from "react-router-dom";
+import CreateTag from "./modals/CreateTag";
+import Tag from "./Tag";
 
 
 
@@ -11,16 +13,17 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
   const [contentData, setContentData] = useState()
   const [editState, setEditState] = useState([])
   const [textState, setTextState] = useState({})
-  const [formState, setFormState] = useState({title: '', number: null, image: ''})
-  const [modalShow, setModalShow] = useState({boolean: false, number: '', title: '', content_id: ''})
-
+  const [formState, setFormState] = useState({ title: '', number: null, image: '' })
+  const [modalShow, setModalShow] = useState({ boolean: false, number: '', title: '', content_id: '' })
+  const [tagModalShow, setTagModalShow] = useState({ boolean: false, name: '', content_id: null });
+  const handleTagClose = () => setTagModalShow({ boolean: false, name: '', content_id: null })
+  // const handleTagShow = () => setTagModalShow({ boolean: true, name: '' })
 
   useEffect(() => {
     setContentData(contents)
   })
 
   let fileId = useParams()
-
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -73,7 +76,25 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
 
   return (
     <>
-      <ConfirmModal show={modalShow.boolean} onHide={() => setModalShow({boolean: false, number: '', title: '', content_id: ''})} number={modalShow.number} title={modalShow.title} id={modalShow.content_id} file={fileId.id} rerenderFile={rerenderFile}/>
+      {/* modal component for deleting content */}
+      <ConfirmModal
+        show={modalShow.boolean}
+        onHide={() => setModalShow({ boolean: false, number: '', title: '', content_id: '' })}
+        number={modalShow.number}
+        title={modalShow.title}
+        id={modalShow.content_id}
+        file={fileId.id}
+        rerenderFile={rerenderFile}
+      />
+
+      {/* modal component for creating a tag */}
+      <CreateTag
+        show={tagModalShow}
+        onHide={() => setTagModalShow({ boolean: false, name: '', content_id: null })}
+        onClick={() => addTag(token, tagModalShow.name, fileId.id, tagModalShow.content_id, handleTagClose, rerenderFile)}
+        setShow={setTagModalShow}
+      />
+
       <div className="table-of-contents">
         <table className="m-4">
           <tbody>
@@ -86,22 +107,26 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
           </tbody>
         </table>
         <Button variant="dark" className='m-3 mt-0' onClick={handleShow}>
-        Make New Content
-      </Button>
+          Make New Content
+        </Button>
       </div>
 
       {content ? (content.map((content) => {
+        let tags
+        if (content.tags) {
+          tags = Object.values(content.tags)
+        }
         return (
           <div key={content.id} id={content.title} className="content-block">
             <div className="d-flex justify-space-between align-items-center">
               <div className="d-flex">
                 <h2>{content.number}. {content.title}</h2>
 
-                <Dropdown className='mt-2 ml-2' onClick={() => setFormState({title: content.title, number: content.number, image: content.image})}>
-                  <Dropdown.Toggle split variant="dark" id="dropdown-split-basic"/>
+                <Dropdown className='mt-2 ml-2' onClick={() => setFormState({ title: content.title, number: content.number, image: content.image })}>
+                  <Dropdown.Toggle split variant="dark" id="dropdown-split-basic" />
                   <Dropdown.Menu className="dropdown-menu" onClick={(event) => event.stopPropagation()}>
                     <div>
-                    <h5>Edit</h5>
+                      <h5>Edit</h5>
                       <form>
                         <input name="title" className="m-2" type='text' placeholder="name change" defaultValue={content.title} onChange={handleFormChange}></input>
                         <input name="number" className="m-2" type='number' step="0.01" placeholder="number change" defaultValue={content.number} onChange={handleFormChange}></input>
@@ -109,7 +134,8 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
                       </form>
                     </div>
                     <Dropdown.Item onClick={() => updateContent(content.id, fileId.id, formState.title, formState.number, formState.image, token, rerenderFile)}>Save Changes</Dropdown.Item>
-                    <Dropdown.Item  onClick={() => setModalShow({boolean: true, number: content.number, title: content.title, content_id: content.id})}><span className="delete">Delete</span></Dropdown.Item>
+                    <Dropdown.Item onClick={() => setTagModalShow({ boolean: true, name: '', content_id: content.id })}>Add Tags</Dropdown.Item>
+                    <Dropdown.Item onClick={() => setModalShow({ boolean: true, number: content.number, title: content.title, content_id: content.id })}><span className="delete">Delete</span></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
@@ -117,19 +143,32 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
 
             </div>
 
-            {textArray.includes(String(content.id)) ? (
-              <div className="d-flex justify-space-between mt-2">
-                <div className="w-75">
+            {
+              textArray.includes(String(content.id)) ? (
+                <div className="d-flex justify-space-between mt-2">
+                  <div className="w-75">
 
-                  {content.content ? <textarea name={content.id} defaultValue={content.content} onChange={handleChange} placeholder='description' className="w-100"></textarea> : <textarea name={content.id} onChange={handleChange} placeholder='description' className="w-100"></textarea>}
+                    {content.content ? <textarea name={content.id} defaultValue={content.content} onChange={handleChange} placeholder='description' className="w-100"></textarea> : <textarea name={content.id} onChange={handleChange} placeholder='description' className="w-100"></textarea>}
 
+                  </div>
+                  <div className="d-flex flex-column align-items-center btn-div">
+                    <Button variant="secondary" className="custom-btn-attr" onClick={() => saveText(content.id, textState, token, rerenderFile, closeTextArea, content.id, content.content, true)}>Save</Button>
+                    <Button variant="light" className="custom-btn-attr" onClick={() => closeTextArea(content.id, content.content)}>Close</Button>
+                  </div>
                 </div>
-                <div className="d-flex flex-column align-items-center btn-div">
-                  <Button variant="secondary" className="custom-btn-attr" onClick={() => saveText(content.id, textState, token, rerenderFile, closeTextArea, content.id, content.content, true)}>Save</Button>
-                  <Button variant="light" className="custom-btn-attr" onClick={() => closeTextArea(content.id, content.content)}>Close</Button>
-                </div>
-              </div>
-            ) : (<p className="ml-5">{content.content}</p>)}
+              ) : (<p className="ml-5">{content.content}</p>)
+            }
+
+            <h4>Tags</h4>
+            <div className="flex-row">
+            
+            {tags ? tags.map((tag) => {
+              return (
+                <Tag key={tag.id} title={tag.title} id={tag.id} fileId={fileId.id} />
+              )
+            }
+            ) : (null)}
+            </div>
           </div>
         )
       })) : (null)}

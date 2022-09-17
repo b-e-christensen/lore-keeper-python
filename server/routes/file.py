@@ -39,6 +39,8 @@ def get_file():
     contents_dict = {}
     counter = 0
     for row in contents:
+      tags_counter = 0
+      tags_dict = {}
       contents_dict[counter] = {
           "id": row.id,
           "title": row.title,
@@ -48,6 +50,13 @@ def get_file():
           "file_id": row.file_id,
           "image": row.image
       }
+      for row in row.tags:
+        tags_dict[tags_counter] = {
+          "title": row.title,
+          "id": row.id
+        }
+        tags_counter += 1
+      contents_dict[counter]['tags'] = tags_dict
       counter += 1
 
     return {"file": file_dict, "contents": contents_dict}

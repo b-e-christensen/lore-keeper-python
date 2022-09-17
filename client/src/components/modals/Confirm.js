@@ -1,14 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import useToken from './useToken';
-import { deleteContent, deleteFile } from "../utils/API"
+import useToken from '../useToken';
+import { deleteContent, deleteFile } from "../../utils/API"
 
-function ConfirmModal(props) {
+function Confirm(props) {
 
   const { token, removeToken, setToken } = useToken();
-
-  console.log(props)
-
 
   return (
     <Modal
@@ -39,4 +36,4 @@ function ConfirmModal(props) {
   );
 }
 
-export default ConfirmModal
+export default Confirm

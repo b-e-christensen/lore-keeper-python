@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import FileList from '../components/FileList';
 import Button from 'react-bootstrap/Button';
-import PopupModal from '../components/PopupModal';
-import ConfirmModal from "../components/ConfirmModal";
+import CreateFile from '../components/modals/CreateFile';
+import ConfirmModal from "../components/modals/Confirm";
 import { getUserData, makeFile } from '../utils/API'
 
 
@@ -49,7 +49,7 @@ function Profile(props) {
       </Button>
       </div>
 
-      <PopupModal show={show} handleClose={handleClose} title='What do you want this file to be called?' item='File' onClick={() => makeFile(show.name, props.token, handleClose, getUserData, setProfileData)} setShow={setShow} />
+      <CreateFile show={show} handleClose={handleClose} onClick={() => makeFile(show.name, props.token, handleClose, getUserData, setProfileData)} setShow={setShow} />
       <main>
         <ul id="cards" className='line-class'>
           {files ? (files.map((file) => {

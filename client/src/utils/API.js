@@ -16,12 +16,12 @@ export const saveText = (id, text, token, func, close, param1, param2, param3) =
       text: text[`${id}`]
     }
   })
-  .then((response) => {
-    // function call to close the text area after save
-    close(param1, param2, param3)
-    // function call to refetch the file data
-    func()
-  })
+    .then((response) => {
+      // function call to close the text area after save
+      close(param1, param2, param3)
+      // function call to refetch the file data
+      func()
+    })
 }
 // WORKS and RERENDERS
 export const updateContent = (content_id, file_id, title, number, image, token, func) => {
@@ -38,7 +38,7 @@ export const updateContent = (content_id, file_id, title, number, image, token, 
       image
     }
   })
-  .then(response => func())
+    .then(response => func())
 }
 // WORKS and RERENDERS
 export const deleteContent = (id, fileId, token, onHide, func) => {
@@ -53,12 +53,12 @@ export const deleteContent = (id, fileId, token, onHide, func) => {
       fileId
     }
   })
-  .then((response) => {
-    // function to hide modal
-    onHide()
-    // function call to refetch the file data
-    func()
-  })
+    .then((response) => {
+      // function to hide modal
+      onHide()
+      // function call to refetch the file data
+      func()
+    })
 }
 // WORKS
 export const getUserData = (token, setState) => {
@@ -70,7 +70,8 @@ export const getUserData = (token, setState) => {
     }
   })
     .then((response) => {
-      setState(response.data.files)})
+      setState(response.data.files)
+    })
 }
 // WORKS and RERENDERS
 export const makeFile = (name, token, close, func, setState) => {
@@ -84,9 +85,10 @@ export const makeFile = (name, token, close, func, setState) => {
       Authorization: 'Bearer ' + token
     }
   })
-  .then((response) => {
-    close()
-    func(token, setState)})
+    .then((response) => {
+      close()
+      func(token, setState)
+    })
 }
 // WORKS
 export const getFile = (fileId, token, setState) => {
@@ -101,11 +103,11 @@ export const getFile = (fileId, token, setState) => {
     }
   })
     .then((response) => {
-      if(!response.data.file){
+      if (!response.data.file) {
         window.location.href = '/'
       }
       setState({ contents: response.data.contents, title: response.data.file.title })
-     }
+    }
     )
 }
 // WORKS and RERENDERS
@@ -144,13 +146,11 @@ export const postFile = (token, id, title, tagline, image, func, setState) => {
       image
     }
   })
-  .then(response => func())
+    .then(response => func())
 }
 
 // WORKS and RERENDERS
 export const deleteFile = (token, id, onHide, func) => {
-  console.log(token)
-  console.log(id)
   axios({
     method: "DELETE",
     url: "/file/update",
@@ -161,36 +161,70 @@ export const deleteFile = (token, id, onHide, func) => {
       id
     }
   })
-  .then((response) => {
-    onHide()
-    func()
+    .then((response) => {
+      onHide()
+      func()
+    })
+}
+
+export const addTag = (token, title, file_id, content_id, hide, func) => {
+  axios({
+    method: "POST",
+    url: "/tag",
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    data: {
+      title,
+      file_id,
+      content_id
+    }
   })
+    .then((response) => {
+      hide()
+      func()
+    })
+}
+
+export const getTag = (token, tag_id, file_id, setState) => {
+  axios({
+    method: "POST",
+    url: "/tag/content",
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    data: {
+      tag_id,
+      file_id
+    }
+  })
+    .then(response => setState(response.data.contents))
 }
 
 // WORKS
 export const login = (email, password, setState) => {
   axios({
     method: "POST",
-    url:"/login",
-    data:{
+    url: "/login",
+    data: {
       email,
       password
-     }
+    }
   })
-  .then((response) => setState(response.data.access_token))
+    .then((response) => setState(response.data.access_token))
 }
 // WORKS
 export const signup = (username, email, password, setState) => {
   axios({
     method: "POST",
-    url:"/signup",
-    data:{
+    url: "/signup",
+    data: {
       username,
       email,
       password
-     }
+    }
   })
-  .then((response) => setState(response.data.access_token))
+    .then((response) => setState(response.data.access_token))
 }
 
 
