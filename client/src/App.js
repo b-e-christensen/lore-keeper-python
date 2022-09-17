@@ -48,7 +48,7 @@ function App() {
                   element={<TaggedContent token={token} />}>
                 </Route>
                 <Route
-                  path="/test"
+                  path="/hello"
                   element={<h1>Hello!</h1>}>
                 </Route>
 
