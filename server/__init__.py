@@ -24,7 +24,7 @@ def create_app(test_config=None):
   )
 
   jwt = JWTManager(app)
-  @app.route('/', methods=['GET'])
+  @app.route('/*', methods=['GET'])
   def index():
     return app.send_static_file('index.html')
 
