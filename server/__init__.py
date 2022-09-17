@@ -9,7 +9,7 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 from server.models import User, File
 from server.db import get_db
-from server.routes import api, content, profile, file
+from server.routes import api, content, profile, file, tag
 
 
 def create_app(test_config=None):
@@ -105,6 +105,7 @@ def create_app(test_config=None):
   app.register_blueprint(profile)
   app.register_blueprint(file)
   app.register_blueprint(content)
+  app.register_blueprint(tag)
   init_db(app)
 
   return app

@@ -137,7 +137,8 @@ input {
 
 .landing-page-div {
   background-image: url('./images/desk.jpg');
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover; /* Resize the background image to cover the entire container */
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: cover; 
 }
+

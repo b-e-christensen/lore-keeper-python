@@ -1,9 +1,10 @@
 from datetime import datetime
 from email.mime import image
+from email.policy import default
 from enum import unique
 from typing import Text
 from server.db import Base
-from sqlalchemy import Column, Integer, String, JSON, ForeignKey, DateTime, Text
+from sqlalchemy import Column, Integer, String, JSON, ForeignKey, DateTime, Text, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -16,6 +17,7 @@ class File(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
     # unsure if this is something I wish to keep. functionality to allow multiple people to edit a file. 
     collaborators = Column(JSON)
+    private = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     user = relationship('User')

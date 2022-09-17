@@ -1,11 +1,12 @@
 from server.db import Base
-from sqlalchemy import Column, Integer, ForeignKey, String
-
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Tag(Base):
     __tablename__ = 'tags'
     id = Column(Integer, primary_key=True)
     title = Column(String(200), nullable=False)
-    link = Column(String(200), nullable=True)
-    content_id = Column(Integer, ForeignKey('contents.id'), nullable=True)
+    file_id = Column(Integer, ForeignKey('files.id'))
+
+    file = relationship('File')
     

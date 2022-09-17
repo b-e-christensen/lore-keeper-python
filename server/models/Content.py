@@ -1,8 +1,16 @@
 from datetime import datetime
+from email.policy import default
 from enum import unique
 from server.db import Base
-from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey, DateTime, Float, BLOB, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Text, Boolean, Table
 from sqlalchemy.orm import relationship
+
+content_tags = Table(
+  'content_tags',
+  Base.metadata,
+  Column('content_id', ForeignKey('contents.id')),
+  Column('tag_id', ForeignKey('tags.id'))
+)
 
 
 class Content(Base):
@@ -13,6 +21,10 @@ class Content(Base):
     number = Column(Float, nullable=False)
     content = Column(Text, nullable=True)
     image = Column(Text, nullable=True)
+    section = Column(Boolean, default=False)
+
+    tags = relationship('Tag', secondary=content_tags, backref='contents')
+
     # to show who made the content? 
     user_id = Column(Integer, ForeignKey('users.id'))
     file_id = Column(Integer, ForeignKey('files.id'))
@@ -21,4 +33,3 @@ class Content(Base):
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = relationship('User')
-    tags = relationship('Tag', cascade='all,delete')
