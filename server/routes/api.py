@@ -22,7 +22,6 @@ def test():
 
   user = db.query(User).filter(User.email == email).one()
   file_name = request.json.get("fileName")
-  print(file_name)
 
   new_file = File(
     title = file_name,

@@ -79,7 +79,6 @@ def make_content():
 def update():
   content_id = request.json.get('content_id')
   text = request.json.get('text')
-  print(text)
   db = get_db()
 
   content = db.query(Content).filter(Content.id == content_id).one()

@@ -34,6 +34,5 @@ def test():
     }
     counter += 1
 
-  print(file_dict)
   return { "files": file_dict }
 

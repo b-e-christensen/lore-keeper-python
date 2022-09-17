@@ -15,8 +15,6 @@ function Profile(props) {
 
   const [modalShow, setModalShow] = useState({boolean: false, number: '', title: '', id: ''})
 
-  console.log(modalShow)
-
   let files
   useEffect(() => {
     getUserData(props.token, setProfileData)

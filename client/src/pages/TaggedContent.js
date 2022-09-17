@@ -11,8 +11,6 @@ function TaggedContent({ token }) {
     getTag(token, params.tag_id, params.file_id, setTaggedState)
   }, [])
 
-  console.log(taggedState)
-
   return (
     <>
       <h1>it works</h1>
