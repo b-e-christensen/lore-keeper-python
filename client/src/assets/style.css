@@ -1,13 +1,3 @@
-.blue-background {
-  background-color: lightblue;
-}
-
-.file-name:hover {
-  color: blue;
-  transition: 1s;
-  cursor: pointer;
-}
-
 .table-of-contents {
   border: 2px solid black;
   margin: 25px;
@@ -82,11 +72,6 @@ input {
   margin: 0.425rem 0;
   border: 1px solid #484848;
   border-radius: 0.3rem;
-}
-
-.unique-background {
-  position: absolute;
-  z-index: 100;
 }
 
 .header {

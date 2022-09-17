@@ -21,51 +21,6 @@
 	padding-top: calc(var(--index) * var(--card-top-offset));
 }
 
-@supports (animation-timeline: works) {
-
-	@scroll-timeline cards-element-scrolls-in-body {
-		source: selector(body);
-		scroll-offsets:
-			/* Start when the start edge touches the top of the scrollport */
-			selector(#cards) start 1,
-			/* End when the start edge touches the start of the scrollport */
-			selector(#cards) start 0;
-		start: selector(#cards) start 1; 
-    /* Start when the start edge touches the top of the scrollport */
-		end: selector(#cards) start 0; 
-    /* End when the start edge touches the start of the scrollport */
-		time-range: 4s;
-	}
-
-	.card {
-		--index0: calc(var(--index) - 1); /* 0-based index */
-		--reverse-index: calc(var(--numcards) - var(--index0)); /* reverse index */
-		--reverse-index0: calc(var(--reverse-index) - 1); /* 0-based reverse index */
-	}
-	
-	.card__content {
-		transform-origin: 50% 0%;
-		will-change: transform;
-
-		--duration: calc(var(--reverse-index0) * 1s);
-		--delay: calc(var(--index0) * 1s);
-
-		animation: var(--duration) linear scale var(--delay) forwards;
-		animation-timeline: cards-element-scrolls-in-body;
-	}
-
-	@keyframes scale {
-		to {
-			transform:
-				scale(calc(
-					1.1
-					-
-					calc(0.1 * var(--reverse-index))
-				));
-		}
-	}
-}
-
 /** DEBUG **/
 
 #debug {
@@ -83,7 +38,6 @@
 #debug:checked ~ main {
   --outline-width: 1px;
 }
-
 
 /** PAGE STYLING **/
 
