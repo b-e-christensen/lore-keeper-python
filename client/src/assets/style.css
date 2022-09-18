@@ -127,3 +127,12 @@ input {
   background-size: cover; 
 }
 
+.btn.btn-light {
+  background-color: #d9e9e8;
+  color: #1a1a1a;
+}
+
+.btn.btn-light:hover {
+  background-color: #84b8b4;
+}
+

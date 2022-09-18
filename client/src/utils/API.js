@@ -202,6 +202,40 @@ export const getTag = (token, tag_id, file_id, setState) => {
 }
 
 // WORKS
+export const getAllTags = (token, file_id, setState) => {
+  axios({
+    method: "POST",
+    url: "/tag/all",
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    data: {
+      file_id
+    }
+  })
+  .then(response => setState(response.data.tags))
+}
+
+export const editTags = (token, file_id, content_id, tag_array, hide, func) => {
+  axios({
+    method: "POST",
+    url: "/tag/edit",
+    headers: {
+      Authorization: 'Bearer ' + token
+    },
+    data: {
+      file_id,
+      content_id,
+      tag_array
+    }
+  })
+  .then((response) => {
+    hide()
+    func()
+  })
+}
+
+// WORKS
 export const login = (email, password, setState) => {
   axios({
     method: "POST",

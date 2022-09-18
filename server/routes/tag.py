@@ -1,6 +1,7 @@
 from email import message
 from os import access, getenv
 import sys
+from urllib import response
 from flask import Blueprint, jsonify, request
 from server.db import init_db
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, \
@@ -32,6 +33,7 @@ def create_tag():
   return jsonify(message="Tag successfully created.")
 
 @bp.route('/content', methods=['POST'])
+@jwt_required()
 def get_tagged():
   data = request.get_json()
   db = get_db()
@@ -67,3 +69,33 @@ def get_tagged():
 
   return { "contents": contents_dict }
 
+@bp.route('/all', methods=['POST'])
+@jwt_required()
+def get_all_tags():
+  data = request.get_json()
+  db = get_db()
+  all_tags = []
+  tags = db.query(Tag).filter(Tag.file_id == data['file_id']).all()
+
+  for row in tags:
+    all_tags.append({ "id": row.id, "title": row.title })
+
+  return jsonify(tags=all_tags)
+
+@bp.route('/edit', methods=['POST'])
+@jwt_required()
+def edit_tags():
+  data = request.get_json()
+  db = get_db()
+  try:
+    content = db.query(Content).filter(Content.id == data['content_id']).one()
+    tags = db.query(Tag).filter(Tag.id.in_(data['tag_array'])).all()
+    content.tags = tags
+    db.commit()
+  except: 
+    print(sys.exc_info()[0])
+
+    db.rollback()
+    return jsonify(message = 'An error occured'), 404
+
+  return jsonify(message='Success!')

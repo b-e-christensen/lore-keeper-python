@@ -13,7 +13,6 @@ function File(props) {
   const [show, setShow] = useState({ boolean: false, name: '', number: null })
   const handleClose = () => setShow({ boolean: false, name: '', number: null })
   const handleShow = () => setShow({ boolean: true, name: '', number: null })
-
   let fileId = useParams()
   useEffect(() => {
     getFile(fileId.id, props.token, setFileData)
