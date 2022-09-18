@@ -15,9 +15,8 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
   const [textState, setTextState] = useState({})
   const [formState, setFormState] = useState({ title: '', number: null, image: '' })
   const [modalShow, setModalShow] = useState({ boolean: false, number: '', title: '', content_id: '' })
-  const [tagModalShow, setTagModalShow] = useState({ boolean: false, name: '', content_id: null });
-  const handleTagClose = () => setTagModalShow({ boolean: false, name: '', content_id: null })
-  // const handleTagShow = () => setTagModalShow({ boolean: true, name: '' })
+  const [tagModalShow, setTagModalShow] = useState({ boolean: false, name: '', content_id: null, tags: [] });
+  const handleTagClose = () => setTagModalShow({ boolean: false, name: '', content_id: null, tags: [] })
 
   useEffect(() => {
     setContentData(contents)
@@ -70,6 +69,16 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
     content = Object.values(contentData)
   }
 
+  function getTags(index, contentId) {
+      let array = []
+      let tag_ids = Object.values(content[index].tags)
+      for (let i = 0; i < tag_ids.length; i++) {
+        array.push(tag_ids[i].id)
+      }
+
+    setTagModalShow({ boolean: true, name: '', content_id: contentId, tags: array })
+  }
+
   function anchorTag(id) {
     return `#${id}`
   }
@@ -90,9 +99,13 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
       {/* modal component for creating a tag */}
       <CreateTag
         show={tagModalShow}
-        onHide={() => setTagModalShow({ boolean: false, name: '', content_id: null })}
+        onHide={() => setTagModalShow({ boolean: false, name: '', content_id: null, tags: [] })}
         onClick={() => addTag(token, tagModalShow.name, fileId.id, tagModalShow.content_id, handleTagClose, rerenderFile)}
         setShow={setTagModalShow}
+        token={token}
+        fileId={fileId.id}
+        content_id={tagModalShow.content_id}
+        rerenderFile={rerenderFile}
       />
 
       <div className="table-of-contents">
@@ -111,7 +124,7 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
         </Button>
       </div>
 
-      {content ? (content.map((content) => {
+      {content ? (content.map((content, i) => {
         let tags
         if (content.tags) {
           tags = Object.values(content.tags)
@@ -134,7 +147,7 @@ function ContentBlock({ contents, title, token, rerenderFile, handleShow }) {
                       </form>
                     </div>
                     <Dropdown.Item onClick={() => updateContent(content.id, fileId.id, formState.title, formState.number, formState.image, token, rerenderFile)}>Save Changes</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setTagModalShow({ boolean: true, name: '', content_id: content.id })}>Add Tags</Dropdown.Item>
+                    <Dropdown.Item onClick={() => getTags(i, content.id)}>Add/Edit Tags</Dropdown.Item>
                     <Dropdown.Item onClick={() => setModalShow({ boolean: true, number: content.number, title: content.title, content_id: content.id })}><span className="delete">Delete</span></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
