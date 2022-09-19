@@ -38,7 +38,8 @@ def get_tagged():
   data = request.get_json()
   db = get_db()
   contents = db.query(Content).filter(Content.file_id == data['file_id']).all()
-
+  file = db.query(File).filter(File.id == data['file_id']).one()
+  tag = db.query(Tag).filter(Tag.id == data['tag_id']).one()
   counter = 0
   contents_dict = {}
 
@@ -67,7 +68,7 @@ def get_tagged():
         contents_dict[counter]['tags'] = tags_dict
     counter += 1
 
-  return { "contents": contents_dict }
+  return { "contents": contents_dict, "title": file.title, "tag": tag.title }
 
 @bp.route('/all', methods=['POST'])
 @jwt_required()
