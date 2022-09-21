@@ -12,7 +12,7 @@ function TaggedContent({ token }) {
   const [show, setShow] = useState({ boolean: false, name: '', number: null })
   const handleClose = () => setShow({ boolean: false, name: '', number: null })
   const handleShow = () => setShow({ boolean: true, name: '', number: null })
-  console.log(taggedState)
+
   let fileId = useParams()
   useEffect(() => {
     getTag(token, params.tag_id, params.id, setTaggedState)
