@@ -198,7 +198,7 @@ export const getTag = (token, tag_id, file_id, setState) => {
       file_id
     }
   })
-    .then(response => setState(response.data.contents))
+    .then(response => setState(response.data))
 }
 
 // WORKS

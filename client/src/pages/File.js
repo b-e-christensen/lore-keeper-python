@@ -22,10 +22,6 @@ function File(props) {
     getFile(fileId.id, props.token, setFileData)
   }
 
-  const postContent = () => {
-    makeContent(fileId.id, show.name, show.number, props.token, handleClose, getFile, setFileData)
-  }
-
   return (
     <>
       <CreateContent show={show} handleClose={handleClose} onClick={() => makeContent(fileId.id, show.name, show.number, props.token, handleClose, getFile, setFileData)} setShow={setShow} />

@@ -1,21 +1,43 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { getTag } from '../utils/API'
+import { getTag, makeContent } from '../utils/API'
+import ContentBlock from "../components/ContentBlock";
+import CreateContent from "../components/modals/CreateContent";
 
 function TaggedContent({ token }) {
 
   let params = useParams()
-  const [taggedState, setTaggedState] = useState('')
 
+  const [taggedState, setTaggedState] = useState()
+  const [show, setShow] = useState({ boolean: false, name: '', number: null })
+  const handleClose = () => setShow({ boolean: false, name: '', number: null })
+  const handleShow = () => setShow({ boolean: true, name: '', number: null })
+
+  let fileId = useParams()
   useEffect(() => {
-    getTag(token, params.tag_id, params.file_id, setTaggedState)
+    getTag(token, params.tag_id, params.id, setTaggedState)
   }, [])
 
-  console.log(taggedState)
+  const rerenderFile = () => {
+    getTag(token, params.tag_id, params.id, setTaggedState)
+  }
 
   return (
     <>
-      <h1>it works</h1>
+      <CreateContent show={show} handleClose={handleClose} onClick={() => makeContent(fileId.id, show.name, show.number, token, handleClose, getTag, setTaggedState)} setShow={setShow} />
+
+      {taggedState ? <>
+        <h3 className="m-1">Viewing {taggedState.tag}</h3>
+        <ContentBlock
+          token={token}
+          contents={taggedState.contents}
+          title={taggedState.title}
+          rerenderFile={rerenderFile}
+          handleShow={handleShow}
+        />
+      </> : null}
+
+
     </>
   )
 }
